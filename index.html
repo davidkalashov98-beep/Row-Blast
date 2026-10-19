@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Row Blast</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;600&family=Unbounded:wght@600;800&display=swap">
+<style>
+:root {
+  --bg: #0a2f6b;
+  --panel: #153f7a;
+  --cell: #1f5299;
+  --fg: #f0f7ff;
+  --muted: #9ab8e0;
+  --accent: #ffd966;
+  --c0: #ff9b8a;
+  --c1: #ffd966;
+  --c2: #b8e986;
+  --c3: #8ee6db;
+  --c4: #8ec5ff;
+  --c5: #c4a8ff;
+  --c6: #ffa8d0;
+  --display: 'Unbounded', 'Arial Black', system-ui, sans-serif;
+  --body: 'Onest', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  color-scheme: dark;
+}
+
+/* ---------- Тема: чёрная ---------- */
+html[data-theme="black"] {
+  --bg: #0b0b0d;
+  --panel: #17181c;
+  --cell: #24262c;
+  --fg: #f2f2f4;
+  --muted: #9a9aa5;
+  --accent: #ffd966;
+  --c0: #ff8f7a;
+  --c1: #ffd24d;
+  --c2: #a6e36a;
+  --c3: #6fe0d1;
+  --c4: #74b6ff;
+  --c5: #b394ff;
+  --c6: #ff8fc6;
+}
+
+/* ---------- Тема: деревянная ---------- */
+html[data-theme="wood"] {
+  --bg: #2a1a10;
+  --panel: #4a2f1c;
+  --cell: #6b4426;
+  --fg: #fff4e0;
+  --muted: #d0a878;
+  --accent: #ffb347;
+  --c0: #e8745a;
+  --c1: #f2c14e;
+  --c2: #9ccb5a;
+  --c3: #5fc9b0;
+  --c4: #6fa8e0;
+  --c5: #b48fe0;
+  --c6: #e98fb8;
+  color-scheme: dark;
+}
+html[data-theme="wood"] .board,
+html[data-theme="wood"] .slot,
+html[data-theme="wood"] .stat,
+html[data-theme="wood"] .settings-card {
+  background-image:
+    repeating-linear-gradient(
+      92deg,
+      rgba(0,0,0,0.10) 0px,
+      rgba(0,0,0,0.00) 2px,
+      rgba(255,255,255,0.05) 4px,
+      rgba(0,0,0,0.00) 7px
+    ),
+    repeating-linear-gradient(
+      88deg,
+      rgba(0,0,0,0.06) 0px,
+      rgba(0,0,0,0.00) 12px,
+      rgba(255,255,255,0.03) 18px,
+      rgba(0,0,0,0.00) 26px
+    );
+}
+html[data-theme="wood"] .cell {
+  background-image: repeating-linear-gradient(
+    90deg,
+    rgba(0,0,0,0.08) 0px,
+    rgba(0,0,0,0.00) 3px,
+    rgba(255,255,255,0.04) 5px,
+    rgba(0,0,0,0.00) 9px
+  );
+}
+html[data-theme="wood"] h1,
+html[data-theme="wood"] .menu h1 {
+  text-shadow: 0 2px 0 rgba(0,0,0,0.35), 0 4px 18px rgba(0,0,0,0.5);
+}
+
+/* ---------- Тема: новогодняя ---------- */
+html[data-theme="newyear"] {
+  --bg: #0b1e2d;
+  --panel: #123349;
+  --cell: #1a4a66;
+  --fg: #f4fbff;
+  --muted: #a8cbe0;
+  --accent: #ff4d4d;
+  --c0: #ff4d4d;
+  --c1: #ffd93d;
+  --c2: #3ddc84;
+  --c3: #7fd8ff;
+  --c4: #ffffff;
+  --c5: #c0c8d8;
+  --c6: #ff6fb5;
+  color-scheme: dark;
+}
+html[data-theme="newyear"] .board,
+html[data-theme="newyear"] .slot,
+html[data-theme="newyear"] .stat,
+html[data-theme="newyear"] .settings-card {
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(255,255,255,0.10) 0 2px, transparent 3px),
+    radial-gradient(circle at 70% 60%, rgba(255,255,255,0.08) 0 2px, transparent 3px),
+    radial-gradient(circle at 45% 85%, rgba(255,255,255,0.07) 0 2px, transparent 3px),
+    radial-gradient(circle at 85% 15%, rgba(255,255,255,0.09) 0 2px, transparent 3px);
+  background-size: 60px 60px, 80px 80px, 70px 70px, 90px 90px;
+}
+html[data-theme="newyear"] .cell {
+  background-image: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.08) 0 1.5px, transparent 2.5px);
+  background-size: 30px 30px;
+}
+html[data-theme="newyear"] h1,
+html[data-theme="newyear"] .menu h1 {
+  text-shadow: 0 0 12px rgba(255,77,77,0.5), 0 2px 0 rgba(0,0,0,0.4);
+}
+html[data-theme="newyear"] .over { background: rgba(6, 20, 30, 0.93); }
+
+/* ---------- Тема: Block Blast ---------- */
+html[data-theme="blockblast"] {
+  --bg: #eef2f8;
+  --panel: #ffffff;
+  --cell: #dfe6f0;
+  --fg: #1f2a3a;
+  --muted: #6b7a90;
+  --accent: #2f7bff;
+  --c0: #ff5a5f;
+  --c1: #ffb020;
+  --c2: #38c46a;
+  --c3: #17c3c3;
+  --c4: #3d8bfd;
+  --c5: #8b5cf6;
+  --c6: #ff6bcb;
+  color-scheme: light;
+}
+html[data-theme="blockblast"] .board,
+html[data-theme="blockblast"] .slot,
+html[data-theme="blockblast"] .stat,
+html[data-theme="blockblast"] .settings-card {
+  box-shadow: 0 4px 14px rgba(40, 70, 120, 0.12);
+}
+html[data-theme="blockblast"] .cell {
+  border-radius: 26%;
+}
+html[data-theme="blockblast"] .cell.filled,
+html[data-theme="blockblast"] .bk {
+  box-shadow: inset 0 2px 0 rgba(255,255,255,0.55), inset 0 -3px 0 rgba(0,0,0,0.12);
+}
+html[data-theme="blockblast"] .bk { border-radius: 26%; }
+html[data-theme="blockblast"] .over { background: rgba(238, 242, 248, 0.94); }
+html[data-theme="blockblast"] .over h2 { color: var(--fg); }
+html[data-theme="blockblast"] .menu h1 { text-shadow: 0 3px 12px rgba(47,123,255,0.25); }
+html[data-theme="blockblast"] button.primary { color: #ffffff; box-shadow: 0 4px 0 #1b5ad1; }
+html[data-theme="blockblast"] .menu button.primary { box-shadow: 0 4px 0 #1b5ad1; }
+html[data-theme="blockblast"] .cell.wc { outline-color: var(--accent); }
+html[data-theme="blockblast"] .ghost { filter: drop-shadow(0 8px 10px rgba(40, 70, 120, 0.25)); }
+
+/* ---------- Тема: тёмно-голубая ---------- */
+html[data-theme="darkblue"] {
+  --bg: #0c1a2b;
+  --panel: #13253b;
+  --cell: #1b3450;
+  --fg: #e8f2ff;
+  --muted: #8fb0d0;
+  --accent: #4dabf7;
+  --c0: #ff8a80;
+  --c1: #ffd166;
+  --c2: #9be36a;
+  --c3: #5fe0c8;
+  --c4: #6fb8ff;
+  --c5: #a996ff;
+  --c6: #ff8fc8;
+  color-scheme: dark;
+}
+html[data-theme="darkblue"] .over { background: rgba(8, 18, 30, 0.93); }
+html[data-theme="darkblue"] h1,
+html[data-theme="darkblue"] .menu h1 {
+  text-shadow: 0 0 14px rgba(77,171,247,0.35), 0 2px 0 rgba(0,0,0,0.4);
+}
+
+html, body { height: 100%; margin: 0; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--body);
+  font-size: 15px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 12px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+.app {
+  --bs: 400px;
+  width: var(--bs);
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+h1 {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: clamp(18px, 5vw, 24px);
+  line-height: 1;
+  letter-spacing: 0.03em;
+  color: var(--accent);
+}
+.stats { display: flex; gap: 8px; }
+.stat {
+  background-color: var(--panel);
+  border-radius: 10px;
+  padding: 5px 12px;
+  min-width: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.lbl { font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.stat b { font-family: var(--display); font-weight: 600; font-size: 17px; font-variant-numeric: tabular-nums; color: var(--fg); }
+.stat.best b { color: var(--accent); }
+.bump { animation: bump 0.15s ease; }
+@keyframes bump { 50% { transform: scale(1.18); } }
+
+.boardwrap { position: relative; }
+.board {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+  gap: 3px;
+  padding: 6px;
+  width: var(--bs);
+  height: var(--bs);
+  max-width: 100%;
+  box-sizing: border-box;
+  background-color: var(--panel);
+  border-radius: 14px;
+  touch-action: none;
+}
+.cell { background-color: var(--cell); border-radius: 22%; min-width: 0; min-height: 0; }
+.cell.filled, .cell.pv, .bk {
+  background-color: var(--b);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.5), inset 0 -2px 0 rgba(0, 0, 0, 0.15);
+}
+.cell.pv { opacity: 0.6; }
+.cell.wc { outline: 2px solid var(--fg); outline-offset: -2px; filter: brightness(1.3); opacity: 1; }
+.cell.clearing { animation: pop 0.18s ease forwards; z-index: 2; }
+@keyframes pop {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.15); filter: brightness(1.7); }
+  100% { transform: scale(0); opacity: 0; }
+}
+
+.tray {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  width: var(--bs);
+  max-width: 100%;
+}
+.slot {
+  background-color: var(--panel);
+  border-radius: 12px;
+  height: var(--slot-h, 120px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: none;
+  cursor: grab;
+  min-width: 0;
+}
+.slot.used { cursor: default; opacity: 0.35; }
+.slot.dead { cursor: not-allowed; }
+.slot.dead .pg { opacity: 0.35; filter: grayscale(0.7); }
+.slot.lifted .pg { opacity: 0.2; }
+.pg { display: grid; }
+.bk { border-radius: 22%; }
+.ghost { position: fixed; left: 0; top: 0; z-index: 50; pointer-events: none; will-change: transform; filter: drop-shadow(0 8px 10px rgba(0, 0, 0, 0.45)); }
+
+.controls { display: flex; gap: 8px; flex-wrap: wrap; }
+button {
+  font: inherit;
+  font-weight: 600;
+  color: var(--fg);
+  background-color: var(--panel);
+  border: 1px solid var(--cell);
+  border-radius: 10px;
+  padding: 8px 14px;
+  cursor: pointer;
+}
+button:hover { border-color: var(--muted); }
+button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+button.primary { background-color: var(--accent); color: #ffffff; border-color: var(--accent); }
+html:not([data-theme="blockblast"]) button.primary { color: #1c1300; }
+
+.fx { position: absolute; inset: 0; pointer-events: none; display: grid; place-items: center; overflow: hidden; }
+.fx div {
+  position: absolute;
+  text-align: center;
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: clamp(22px, 7vw, 34px);
+  color: var(--fg);
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
+  animation: rise 0.55s ease-out forwards;
+}
+.fx small { display: block; font-size: 0.5em; color: var(--accent); margin-top: 2px; }
+@keyframes rise {
+  0% { transform: translateY(14px) scale(0.8); opacity: 0; }
+  20% { transform: translateY(0) scale(1.05); opacity: 1; }
+  100% { transform: translateY(-48px) scale(1); opacity: 0; }
+}
+
+.over {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 8px;
+  text-align: center;
+  background: rgba(8, 30, 60, 0.9);
+  border-radius: 14px;
+  z-index: 5;
+  padding: 16px;
+}
+html[data-theme="black"] .over { background: rgba(10, 10, 12, 0.92); }
+html[data-theme="wood"] .over { background: rgba(30, 16, 8, 0.92); }
+.over[hidden] { display: none; }
+.over h2 { margin: 0; font-family: var(--display); font-weight: 800; font-size: 24px; }
+.over .big { font-family: var(--display); font-weight: 600; font-size: 40px; color: var(--accent); font-variant-numeric: tabular-nums; }
+.over p { margin: 0; color: var(--muted); }
+.over button { margin-top: 8px; }
+
+.confetti-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100;
+  overflow: hidden;
+}
+.confetti {
+  position: absolute;
+  width: 8px;
+  height: 14px;
+  border-radius: 2px;
+  opacity: 0.9;
+  animation: confetti-fall linear forwards;
+}
+@keyframes confetti-fall {
+  0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  text-align: center;
+  min-height: 60vh;
+  padding: 24px;
+}
+.menu[hidden] { display: none; }
+.menu h1 {
+  font-size: clamp(36px, 12vw, 64px);
+  letter-spacing: 0.06em;
+  text-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+.menu-best {
+  font-family: var(--body);
+  color: var(--muted);
+  font-size: 16px;
+}
+.menu-best b {
+  font-family: var(--display);
+  font-weight: 600;
+  color: var(--accent);
+  font-size: 20px;
+  font-variant-numeric: tabular-nums;
+  margin-left: 6px;
+}
+.menu button.primary {
+  padding: 14px 40px;
+  font-size: 18px;
+  border-radius: 14px;
+  box-shadow: 0 4px 0 #c9a800;
+  transform: translateY(-2px);
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+}
+.menu button.primary:active {
+  transform: translateY(2px);
+  box-shadow: 0 0 0 #c9a800;
+}
+html[data-theme="blockblast"] .menu button.primary:active { box-shadow: 0 0 0 #1b5ad1; }
+.menu-hint {
+  color: var(--muted);
+  font-size: 13px;
+  max-width: 260px;
+  line-height: 1.4;
+}
+.menu-hint[hidden] { display: none; }
+.menu-buttons { display: flex; flex-direction: column; gap: 10px; align-items: center; }
+
+.game { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+.game[hidden] { display: none; }
+
+/* ---------- Settings ---------- */
+.settings {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(3px);
+}
+html[data-theme="blockblast"] .settings { background: rgba(30, 50, 80, 0.35); }
+.settings[hidden] { display: none; }
+.settings-card {
+  width: min(460px, 100%);
+  background-color: var(--panel);
+  color: var(--fg);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 90vh;
+  overflow: auto;
+}
+.settings-card h2 {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 20px;
+}
+.settings-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.settings-row > span {
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.theme-options { display: flex; gap: 8px; flex-wrap: wrap; }
+.theme-option {
+  flex: 1 1 30%;
+  min-width: 96px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 2px solid var(--cell);
+  background-color: transparent;
+  color: var(--fg);
+  cursor: pointer;
+  font-weight: 600;
+  text-align: left;
+}
+.theme-option[aria-pressed="true"] {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(255, 217, 102, 0.25);
+}
+html[data-theme="blockblast"] .theme-option[aria-pressed="true"] {
+  box-shadow: 0 0 0 2px rgba(47, 123, 255, 0.25);
+}
+.theme-swatch {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  flex: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.theme-swatch.blue { background: linear-gradient(135deg, #0a2f6b 0 50%, #1f5299 50% 100%); }
+.theme-swatch.black { background: linear-gradient(135deg, #0b0b0d 0 50%, #24262c 50% 100%); }
+.theme-swatch.wood {
+  background:
+    repeating-linear-gradient(90deg, rgba(0,0,0,0.18) 0 2px, rgba(255,255,255,0.07) 2px 4px, rgba(0,0,0,0) 4px 7px),
+    linear-gradient(135deg, #6b4426 0 50%, #4a2f1c 50% 100%);
+}
+.theme-swatch.newyear {
+  background:
+    radial-gradient(circle at 25% 30%, #ffffff 0 2px, transparent 2.5px),
+    radial-gradient(circle at 70% 65%, #ffffff 0 2px, transparent 2.5px),
+    linear-gradient(135deg, #0b1e2d 0 50%, #1a4a66 50% 100%);
+}
+.theme-swatch.blockblast {
+  background: linear-gradient(135deg, #eef2f8 0 50%, #dfe6f0 50% 100%);
+  border-color: rgba(0, 0, 0, 0.15);
+}
+.theme-swatch.darkblue {
+  background: linear-gradient(135deg, #0c1a2b 0 50%, #1b3450 50% 100%);
+}
+.settings-actions { display: flex; justify-content: space-between; gap: 8px; margin-top: 4px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .cell.clearing { animation: none; opacity: 0; }
+  .fx div { animation: none; opacity: 1; }
+  .bump { animation: none; }
+  .confetti { display: none; }
+  body { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<main class="app" id="app">
+  <!-- Меню -->
+  <div class="menu" id="menu">
+    <h1>ROW BLAST</h1>
+    <div class="menu-best">Рекорд: <b id="menuBest">0</b></div>
+    <div class="menu-buttons">
+      <button class="primary" id="playBtn" type="button">Играть</button>
+      <button id="menuSettingsBtn" type="button">Настройки</button>
+    </div>
+    <p class="menu-hint" id="menuHint" hidden>У вас есть сохранённая партия — продолжите с того же места.</p>
+  </div>
+
+  <!-- Игра -->
+  <div class="game" id="game" hidden>
+    <header class="top">
+      <h1>ROW BLAST</h1>
+      <div class="stats">
+        <div class="stat"><span class="lbl">Счёт</span><b id="score">0</b></div>
+        <div class="stat best"><span class="lbl">Рекорд</span><b id="best">0</b></div>
+      </div>
+    </header>
+    <div class="boardwrap">
+      <div class="board" id="board" aria-label="Игровое поле 8 на 8"></div>
+      <div class="fx" id="fx" aria-hidden="true"></div>
+      <div class="over" id="over" role="status" aria-live="polite" hidden>
+        <h2>Игра окончена</h2>
+        <div class="big" id="overScore">0</div>
+        <p id="overNote"></p>
+        <button class="primary" id="again" type="button">Играть снова</button>
+      </div>
+    </div>
+    <div class="tray" id="tray">
+      <div class="slot" data-i="0"></div>
+      <div class="slot" data-i="1"></div>
+      <div class="slot" data-i="2"></div>
+    </div>
+    <div class="controls">
+      <button id="newGame" type="button">Заново</button>
+      <button id="sound" type="button">Звук: вкл</button>
+      <button id="gameSettingsBtn" type="button">Настройки</button>
+      <button id="backToMenu" type="button">В меню</button>
+    </div>
+  </div>
+</main>
+
+<!-- Настройки -->
+<div class="settings" id="settings" role="dialog" aria-modal="true" aria-labelledby="settingsTitle" hidden>
+  <div class="settings-card">
+    <h2 id="settingsTitle">Настройки</h2>
+    <div class="settings-row">
+      <span>Тема оформления</span>
+      <div class="theme-options" role="group" aria-label="Тема оформления">
+        <button type="button" class="theme-option" data-theme-choice="blue" aria-pressed="true">
+          <span class="theme-swatch blue" aria-hidden="true"></span>
+          Синяя
+        </button>
+        <button type="button" class="theme-option" data-theme-choice="black" aria-pressed="false">
+          <span class="theme-swatch black" aria-hidden="true"></span>
+          Чёрная
+        </button>
+        <button type="button" class="theme-option" data-theme-choice="wood" aria-pressed="false">
+          <span class="theme-swatch wood" aria-hidden="true"></span>
+          Деревянная
+        </button>
+        <button type="button" class="theme-option" data-theme-choice="newyear" aria-pressed="false">
+          <span class="theme-swatch newyear" aria-hidden="true"></span>
+          Новогодняя
+        </button>
+        <button type="button" class="theme-option" data-theme-choice="blockblast" aria-pressed="false">
+          <span class="theme-swatch blockblast" aria-hidden="true"></span>
+          Block Blast
+        </button>
+        <button type="button" class="theme-option" data-theme-choice="darkblue" aria-pressed="false">
+          <span class="theme-swatch darkblue" aria-hidden="true"></span>
+          Тёмно-голубая
+        </button>
+      </div>
+    </div>
+    <div class="settings-row">
+      <span>Звук</span>
+      <button type="button" id="settingsSound">Звук: вкл</button>
+    </div>
+    <div class="settings-actions">
+      <button type="button" id="settingsClose">Закрыть</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var N = 8;
+  var KEY_SAVE = 'rowblast.save';
+  var KEY_BEST = 'rowblast.best';
+  var KEY_MUTE = 'rowblast.mute';
+  var KEY_THEME = 'rowblast.theme';
+
+  /* ---------- Theme ---------- */
+  var THEMES = { blue: true, black: true, wood: true, newyear: true, blockblast: true, darkblue: true };
+  var currentTheme = 'blue';
+  try {
+    var savedTheme = localStorage.getItem(KEY_THEME);
+    if (savedTheme && THEMES[savedTheme]) currentTheme = savedTheme;
+  } catch (e) {}
+  function applyTheme(t) {
+    currentTheme = THEMES[t] ? t : 'blue';
+    document.documentElement.setAttribute('data-theme', currentTheme);
+    try { localStorage.setItem(KEY_THEME, currentTheme); } catch (e) {}
+    themeButtons.forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b.dataset.themeChoice === currentTheme));
+    });
+  }
+
+  /* ---------- Shapes ---------- */
+  var RAW = [
+    ['#'],
+    ['##'], ['#', '#'],
+    ['###'], ['#', '#', '#'],
+    ['####'], ['#', '#', '#', '#'],
+    ['#####'], ['#', '#', '#', '#', '#'],
+    ['##', '##'],
+    ['###', '###', '###'],
+    ['###', '###'], ['##', '##', '##'],
+    ['#.', '##'], ['.#', '##'], ['##', '#.'], ['##', '.#'],
+    ['#..', '#..', '###'], ['..#', '..#', '###'], ['###', '#..', '#..'], ['###', '..#', '..#'],
+    ['#.', '#.', '##'], ['.#', '.#', '##'], ['##', '#.', '#.'], ['##', '.#', '.#'],
+    ['###', '#..'], ['###', '..#'], ['#..', '###'], ['..#', '###'],
+    ['###', '.#.'], ['.#.', '###'], ['#.', '##', '#.'], ['.#', '##', '.#'],
+    ['.##', '##.'], ['##.', '.##'], ['#.', '##', '.#'], ['.#', '##', '#.']
+  ];
+  var SHAPES = RAW.map(function (rows, i) {
+    var cells = [];
+    rows.forEach(function (row, r) {
+      for (var c = 0; c < row.length; c++) if (row[c] === '#') cells.push([r, c]);
+    });
+    var n = cells.length;
+    var straight5 = n === 5 && (rows.length === 1 || rows[0].length === 1);
+    var weight = 1;
+    if (n === 1) weight = 0.6;
+    else if (n >= 9) weight = 0.5;
+    else if (straight5) weight = 0.7;
+    return { cells: cells, w: rows[0].length, h: rows.length, color: i % 7, weight: weight };
+  });
+  var TOTAL_WEIGHT = SHAPES.reduce(function (a, s) { return a + s.weight; }, 0);
+
+  function pickShape() {
+    var x = Math.random() * TOTAL_WEIGHT;
+    for (var i = 0; i < SHAPES.length; i++) {
+      x -= SHAPES[i].weight;
+      if (x <= 0) return i;
+    }
+    return SHAPES.length - 1;
+  }
+
+  /* ---------- State ---------- */
+  var grid = null, pieces = null, score = 0, best = 0, startBest = 0;
+  var busy = false, over = false;
+  var recordBeaten = false;
+
+  try { best = parseInt(localStorage.getItem(KEY_BEST), 10) || 0; } catch (e) { best = 0; }
+  var muted = false;
+  try { muted = localStorage.getItem(KEY_MUTE) === '1'; } catch (e) {}
+
+  /* ---------- DOM ---------- */
+  var $ = function (s) { return document.querySelector(s); };
+  var appEl = $('#app'), boardEl = $('#board'), trayEl = $('#tray'), fxEl = $('#fx');
+  var scoreEl = $('#score'), bestEl = $('#best');
+  var overEl = $('#over'), overScoreEl = $('#overScore'), overNoteEl = $('#overNote');
+  var newBtn = $('#newGame'), soundBtn = $('#sound'), againBtn = $('#again');
+  var menuEl = $('#menu'), gameEl = $('#game'), menuBestEl = $('#menuBest'), playBtn = $('#playBtn');
+  var menuHintEl = $('#menuHint'), backBtn = $('#backToMenu');
+  var settingsEl = $('#settings'), settingsCloseBtn = $('#settingsClose');
+  var settingsSoundBtn = $('#settingsSound');
+  var menuSettingsBtn = $('#menuSettingsBtn'), gameSettingsBtn = $('#gameSettingsBtn');
+  var themeButtons = Array.prototype.slice.call(document.querySelectorAll('[data-theme-choice]'));
+  var slots = Array.prototype.slice.call(trayEl.querySelectorAll('.slot'));
+  var cells = [];
+  for (var i = 0; i < N * N; i++) {
+    var d = document.createElement('div');
+    d.className = 'cell';
+    boardEl.appendChild(d);
+    cells.push(d);
+  }
+
+  /* ---------- Sound ---------- */
+  var ac = null;
+  function tone(freq, delay, dur, type, vol) {
+    if (muted) return;
+    try {
+      ac = ac || new (window.AudioContext || window.webkitAudioContext)();
+      if (ac.state === 'suspended') ac.resume();
+      var o = ac.createOscillator(), g = ac.createGain(), t = ac.currentTime + delay;
+      o.type = type || 'sine';
+      o.frequency.value = freq;
+      g.gain.setValueAtTime(vol || 0.06, t);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(g); g.connect(ac.destination);
+      o.start(t); o.stop(t + dur + 0.02);
+    } catch (e) {}
+  }
+  function sndPlace() { tone(260, 0, 0.06, 'triangle'); }
+  function sndClear(n) {
+    for (var k = 0; k < Math.min(3 + n, 7); k++) tone(380 + k * 90, k * 0.04, 0.1, 'triangle', 0.07);
+  }
+  function sndOver() { [330, 262, 196, 131].forEach(function (f, k) { tone(f, k * 0.1, 0.2, 'sawtooth', 0.04); }); }
+
+  /* ---------- Rules ---------- */
+  function canPlace(sh, r, c) {
+    if (r < 0 || c < 0 || r + sh.h > N || c + sh.w > N) return false;
+    for (var k = 0; k < sh.cells.length; k++) {
+      if (grid[(r + sh.cells[k][0]) * N + c + sh.cells[k][1]] >= 0) return false;
+    }
+    return true;
+  }
+  function fits(sh) {
+    for (var r = 0; r <= N - sh.h; r++)
+      for (var c = 0; c <= N - sh.w; c++)
+        if (canPlace(sh, r, c)) return true;
+    return false;
+  }
+  function findLines(g) {
+    var rows = [], cols = [], set = {};
+    var r, c;
+    for (r = 0; r < N; r++) {
+      var full = true;
+      for (c = 0; c < N; c++) if (g[r * N + c] < 0) { full = false; break; }
+      if (full) rows.push(r);
+    }
+    for (c = 0; c < N; c++) {
+      var fullc = true;
+      for (r = 0; r < N; r++) if (g[r * N + c] < 0) { fullc = false; break; }
+      if (fullc) cols.push(c);
+    }
+    rows.forEach(function (rr) { for (var cc = 0; cc < N; cc++) set[rr * N + cc] = true; });
+    cols.forEach(function (cc) { for (var rr = 0; rr < N; rr++) set[rr * N + cc] = true; });
+    return { rows: rows, cols: cols, set: set, count: rows.length + cols.length };
+  }
+  function newPieces() {
+    var ps;
+    for (var t = 0; t < 40; t++) {
+      ps = [0, 1, 2].map(function () { var s = pickShape(); return { s: s, c: SHAPES[s].color, used: false }; });
+      if (ps.some(function (p) { return fits(SHAPES[p.s]); })) break;
+    }
+    pieces = ps;
+  }
+
+  /* ---------- Render ---------- */
+  function fmt(n) { return n.toLocaleString('ru-RU'); }
+  function renderBoard(clearing) {
+    for (var i = 0; i < cells.length; i++) {
+      var v = grid[i], el = cells[i];
+      el.className = 'cell' + (v >= 0 ? ' filled' : '');
+      if (v >= 0) el.style.setProperty('--b', 'var(--c' + v + ')');
+      else el.style.removeProperty('--b');
+      if (clearing && clearing[i]) el.classList.add('clearing');
+    }
+  }
+  function renderHud(bump) {
+    scoreEl.textContent = fmt(score);
+    bestEl.textContent = fmt(best);
+    menuBestEl.textContent = fmt(best);
+    if (bump) {
+      scoreEl.classList.remove('bump');
+      void scoreEl.offsetWidth;
+      scoreEl.classList.add('bump');
+    }
+  }
+  var sizes = { cell: 40, gap: 3, tcell: 20 };
+  function makePiece(sh, c, size, gap) {
+    var d = document.createElement('div');
+    d.className = 'pg';
+    d.style.gridTemplateColumns = 'repeat(' + sh.w + ',' + size + 'px)';
+    d.style.gridTemplateRows = 'repeat(' + sh.h + ',' + size + 'px)';
+    d.style.gap = gap + 'px';
+    d.style.setProperty('--b', 'var(--c' + c + ')');
+    sh.cells.forEach(function (cell) {
+      var b = document.createElement('i');
+      b.className = 'bk';
+      b.style.gridRow = String(cell[0] + 1);
+      b.style.gridColumn = String(cell[1] + 1);
+      d.appendChild(b);
+    });
+    return d;
+  }
+  function renderTray() {
+    if (!pieces) return;
+    slots.forEach(function (slot, i) {
+      var p = pieces[i];
+      slot.innerHTML = '';
+      slot.className = 'slot';
+      if (!p) return;
+      if (p.used) { slot.classList.add('used'); return; }
+      slot.appendChild(makePiece(SHAPES[p.s], p.c, sizes.tcell, 2));
+      if (!fits(SHAPES[p.s])) slot.classList.add('dead');
+    });
+  }
+  function layout() {
+    var bs = Math.max(240, Math.min(window.innerWidth - 32, 460, window.innerHeight - 320));
+    appEl.style.setProperty('--bs', bs + 'px');
+    var cell = (bs - 12 - 21) / 8;
+    var slotW = (bs - 16) / 3;
+    sizes.cell = cell;
+    sizes.tcell = Math.max(10, Math.floor(Math.min(cell * 0.62, (slotW - 14 - 8) / 5)));
+    appEl.style.setProperty('--slot-h', (5 * sizes.tcell + 8 + 20) + 'px');
+    if (pieces && !gameEl.hidden) renderTray();
+  }
+
+  /* ---------- Effects ---------- */
+  function fxText(main, sub) {
+    var d = document.createElement('div');
+    d.textContent = main;
+    if (sub) {
+      var s = document.createElement('small');
+      s.textContent = sub;
+      d.appendChild(s);
+    }
+    fxEl.appendChild(d);
+    setTimeout(function () { if (d.parentNode) d.parentNode.removeChild(d); }, 600);
+  }
+
+  /* ---------- Confetti ---------- */
+  var confettiContainer = null;
+  function launchConfetti() {
+    if (!confettiContainer) {
+      confettiContainer = document.createElement('div');
+      confettiContainer.className = 'confetti-container';
+      document.body.appendChild(confettiContainer);
+    }
+    confettiContainer.innerHTML = '';
+    var colors = ['#ffd966', '#ff9b8a', '#b8e986', '#8ee6db', '#8ec5ff', '#c4a8ff', '#ffa8d0'];
+    for (var i = 0; i < 70; i++) {
+      var el = document.createElement('div');
+      el.className = 'confetti';
+      el.style.left = (Math.random() * 100) + '%';
+      el.style.top = '-20px';
+      el.style.background = colors[Math.floor(Math.random() * colors.length)];
+      el.style.animationDelay = (Math.random() * 0.4) + 's';
+      el.style.animationDuration = (1 + Math.random() * 1.2) + 's';
+      el.style.width = (6 + Math.random() * 8) + 'px';
+      el.style.height = (10 + Math.random() * 8) + 'px';
+      el.style.transform = 'rotate(' + (Math.random() * 360) + 'deg)';
+      confettiContainer.appendChild(el);
+    }
+    setTimeout(function () {
+      if (confettiContainer) confettiContainer.innerHTML = '';
+    }, 2400);
+  }
+
+  /* ---------- Persistence ---------- */
+  function save() {
+    try {
+      if (over || !grid || !pieces) {
+        localStorage.removeItem(KEY_SAVE);
+        return;
+      }
+      localStorage.setItem(KEY_SAVE, JSON.stringify({
+        v: 1,
+        grid: grid,
+        pieces: pieces,
+        score: score,
+        startBest: startBest
+      }));
+    } catch (e) {}
+  }
+  function saveBest() { try { localStorage.setItem(KEY_BEST, String(best)); } catch (e) {} }
+
+  function readSave() {
+    try {
+      var raw = localStorage.getItem(KEY_SAVE);
+      if (!raw) return null;
+      var s = JSON.parse(raw);
+      if (!s || !Array.isArray(s.grid) || s.grid.length !== N * N) return null;
+      if (!Array.isArray(s.pieces) || s.pieces.length !== 3) return null;
+      for (var i = 0; i < 3; i++) {
+        var p = s.pieces[i];
+        if (!p || typeof p.s !== 'number' || !SHAPES[p.s] || typeof p.c !== 'number') return null;
+      }
+      for (var j = 0; j < s.grid.length; j++) {
+        if (typeof s.grid[j] !== 'number' || s.grid[j] < -1 || s.grid[j] > 6) return null;
+      }
+      return s;
+    } catch (e) { return null; }
+  }
+  function hasSave() { return readSave() !== null; }
+  function load() {
+    var s = readSave();
+    if (!s) return false;
+    grid = s.grid.slice();
+    pieces = s.pieces.map(function (p) { return { s: p.s, c: p.c, used: !!p.used }; });
+    score = s.score | 0;
+    startBest = typeof s.startBest === 'number' ? s.startBest : best;
+    return true;
+  }
+  function clearSave() { try { localStorage.removeItem(KEY_SAVE); } catch (e) {} }
+
+  /* ---------- Game flow ---------- */
+  function newGame() {
+    grid = [];
+    for (var i = 0; i < N * N; i++) grid.push(-1);
+    score = 0;
+    startBest = best;
+    recordBeaten = false;
+    busy = false; over = false;
+    overEl.hidden = true;
+    newPieces();
+    renderBoard();
+    renderHud();
+    renderTray();
+    clearSave();
+    if (!pieces.some(function (p) { return fits(SHAPES[p.s]); })) { finish(); return; }
+    save();
+  }
+  function finish() {
+    over = true;
+    overScoreEl.textContent = fmt(score);
+    overNoteEl.textContent = score > startBest && score > 0
+      ? 'Новый рекорд!'
+      : 'Рекорд: ' + fmt(best);
+    overEl.hidden = false;
+    sndOver();
+    if (recordBeaten) launchConfetti();
+    clearSave();
+    try { againBtn.focus({ preventScroll: true }); } catch (e) {}
+  }
+  function afterMove() {
+    if (pieces.every(function (p) { return p.used; })) newPieces();
+    var empty = grid.every(function (v) { return v < 0; });
+    if (empty && score > 0) {
+      score += 500;
+      fxText('Чистая доска', '+500');
+    }
+    if (score > startBest) recordBeaten = true;
+    if (score > best) {
+      best = score;
+      saveBest();
+    }
+    renderHud(true);
+    renderTray();
+    var alive = pieces.some(function (p) { return !p.used && fits(SHAPES[p.s]); });
+    if (!alive) finish();
+    else save();
+  }
+  function place(idx, r, c) {
+    var p = pieces[idx], sh = SHAPES[p.s];
+    sh.cells.forEach(function (cell) { grid[(r + cell[0]) * N + c + cell[1]] = p.c; });
+    p.used = true;
+    score += sh.cells.length * 5;
+    var res = findLines(grid);
+    if (res.count > 0) {
+      var pts = Math.max(80, 10 * res.count * res.count);
+      score += pts;
+      busy = true;
+      sndClear(res.count);
+      fxText('+' + pts);
+      renderBoard(res.set);
+      renderHud(true);
+      renderTray();
+      setTimeout(function () {
+        for (var k in res.set) grid[k] = -1;
+        renderBoard();
+        busy = false;
+        afterMove();
+      }, 180);
+    } else {
+      sndPlace();
+      renderBoard();
+      afterMove();
+    }
+  }
+
+  /* ---------- Drag and drop ---------- */
+  var drag = null, ghost = null;
+  function gridOrigin() {
+    var a = cells[0].getBoundingClientRect(), b = cells[1].getBoundingClientRect();
+    return { left: a.left, top: a.top, size: a.width, step: b.left - a.left };
+  }
+  function showPreview(sh, color, r, c) {
+    renderBoard();
+    var tmp = grid.slice();
+    sh.cells.forEach(function (cell) { tmp[(r + cell[0]) * N + c + cell[1]] = color; });
+    var res = findLines(tmp);
+    sh.cells.forEach(function (cell) {
+      var el = cells[(r + cell[0]) * N + c + cell[1]];
+      el.classList.add('pv');
+      el.style.setProperty('--b', 'var(--c' + color + ')');
+    });
+    for (var k in res.set) cells[k].classList.add('wc');
+  }
+
+  var rafId = null, lastX = 0, lastY = 0;
+
+  function moveGhost(x, y) {
+    if (!drag) return;
+    var o = gridOrigin();
+    var w = drag.sh.w * o.step - (o.step - o.size);
+    var h = drag.sh.h * o.step - (o.step - o.size);
+    var lift = drag.touch ? o.size * 1.8 : 0;
+    var gx = x - w / 2, gy = y - h / 2 - lift;
+    ghost.style.transform = 'translate3d(' + gx + 'px,' + gy + 'px,0)';
+    var c = Math.round((gx - o.left) / o.step);
+    var r = Math.round((gy - o.top) / o.step);
+    if (canPlace(drag.sh, r, c)) {
+      if (!drag.target || drag.target.r !== r || drag.target.c !== c) {
+        drag.target = { r: r, c: c };
+        showPreview(drag.sh, drag.p.c, r, c);
+      }
+    } else if (drag.target) {
+      drag.target = null;
+      renderBoard();
+    }
+  }
+
+  function scheduleGhost(x, y) {
+    lastX = x; lastY = y;
+    if (rafId) return;
+    rafId = requestAnimationFrame(function () {
+      rafId = null;
+      if (drag) moveGhost(lastX, lastY);
+    });
+  }
+
+  function endDrag(commit) {
+    if (!drag) return;
+    var d = drag;
+    drag = null;
+    if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+    if (ghost && ghost.parentNode) ghost.parentNode.removeChild(ghost);
+    ghost = null;
+    if (slots[d.idx]) slots[d.idx].classList.remove('lifted');
+    if (grid) renderBoard();
+    if (commit && d.target) place(d.idx, d.target.r, d.target.c);
+  }
+  trayEl.addEventListener('pointerdown', function (e) {
+    if (busy || over || drag || gameEl.hidden) return;
+    var slot = e.target.closest('.slot');
+    if (!slot) return;
+    var idx = parseInt(slot.dataset.i, 10);
+    var p = pieces[idx];
+    if (!p || p.used) return;
+    var sh = SHAPES[p.s];
+    if (!fits(sh)) return;
+    e.preventDefault();
+    var o = gridOrigin();
+    var gap = o.step - o.size;
+    ghost = makePiece(sh, p.c, o.size, gap);
+    ghost.classList.add('ghost');
+    document.body.appendChild(ghost);
+    drag = { idx: idx, sh: sh, p: p, target: null, touch: e.pointerType !== 'mouse', pid: e.pointerId };
+    slot.classList.add('lifted');
+    moveGhost(e.clientX, e.clientY);
+  });
+  window.addEventListener('pointermove', function (e) {
+    if (!drag || e.pointerId !== drag.pid) return;
+    e.preventDefault();
+    scheduleGhost(e.clientX, e.clientY);
+  }, { passive: false });
+  window.addEventListener('pointerup', function (e) {
+    if (!drag || e.pointerId !== drag.pid) return;
+    endDrag(true);
+  });
+  window.addEventListener('pointercancel', function (e) {
+    if (!drag || e.pointerId !== drag.pid) return;
+    endDrag(false);
+  });
+
+  /* ---------- Controls ---------- */
+  var armed = false, armTimer = null;
+  function disarm() {
+    armed = false;
+    newBtn.textContent = 'Заново';
+    clearTimeout(armTimer);
+  }
+  newBtn.addEventListener('click', function () {
+    if (over || score === 0 || armed) { disarm(); newGame(); return; }
+    armed = true;
+    newBtn.textContent = 'Точно?';
+    armTimer = setTimeout(disarm, 2000);
+  });
+  againBtn.addEventListener('click', function () { disarm(); newGame(); });
+
+  function soundLabel() {
+    var txt = muted ? 'Звук: выкл' : 'Звук: вкл';
+    soundBtn.textContent = txt;
+    if (settingsSoundBtn) settingsSoundBtn.textContent = txt;
+  }
+  function toggleSound() {
+    muted = !muted;
+    try { localStorage.setItem(KEY_MUTE, muted ? '1' : '0'); } catch (e) {}
+    soundLabel();
+    if (!muted) tone(440, 0, 0.08, 'triangle');
+  }
+  soundBtn.addEventListener('click', toggleSound);
+  settingsSoundBtn.addEventListener('click', toggleSound);
+  soundLabel();
+
+  /* ---------- Settings ---------- */
+  function openSettings() {
+    settingsEl.hidden = false;
+    themeButtons.forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b.dataset.themeChoice === currentTheme));
+    });
+    try { settingsCloseBtn.focus({ preventScroll: true }); } catch (e) {}
+  }
+  function closeSettings() {
+    settingsEl.hidden = true;
+  }
+  menuSettingsBtn.addEventListener('click', openSettings);
+  gameSettingsBtn.addEventListener('click', function () {
+    if (drag) endDrag(false);
+    openSettings();
+  });
+  settingsCloseBtn.addEventListener('click', closeSettings);
+  settingsEl.addEventListener('click', function (e) {
+    if (e.target === settingsEl) closeSettings();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && !settingsEl.hidden) closeSettings();
+  });
+  themeButtons.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      applyTheme(btn.dataset.themeChoice);
+    });
+  });
+
+  /* ---------- Menu <-> Game ---------- */
+  function showMenu() {
+    if (grid && pieces && !over) save();
+    endDrag(false);
+    gameEl.hidden = true;
+    menuEl.hidden = false;
+    menuHintEl.hidden = !hasSave();
+    menuBestEl.textContent = fmt(best);
+  }
+  function startGame() {
+    menuEl.hidden = true;
+    gameEl.hidden = false;
+    layout();
+    if (hasSave() && load()) {
+      busy = false; over = false;
+      overEl.hidden = true;
+      renderBoard();
+      renderHud();
+      renderTray();
+      if (!pieces.some(function (p) { return !p.used && fits(SHAPES[p.s]); })) finish();
+    } else {
+      clearSave();
+      newGame();
+    }
+  }
+  playBtn.addEventListener('click', startGame);
+  backBtn.addEventListener('click', function () {
+    disarm();
+    showMenu();
+  });
+
+  /* ---------- Save on exit ---------- */
+  function flush() { if (grid && pieces && !over) save(); }
+  window.addEventListener('pagehide', flush);
+  window.addEventListener('beforeunload', flush);
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'hidden') flush();
+  });
+
+  window.addEventListener('resize', layout);
+
+  /* ---------- Boot ---------- */
+  applyTheme(currentTheme);
+  layout();
+  renderHud();
+  menuHintEl.hidden = !hasSave();
+  showMenu();
+})();
+</script>
+</body>
+  </html>
